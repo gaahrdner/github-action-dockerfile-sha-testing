@@ -44,7 +44,7 @@ jobs:
 
       - id: dump-github-context
         name: "👀 view github metadata"
-        run: echo ${{ toJson(github) }}
+        run: echo ${{ github }}
 
   build-without-head-sha:
     name: Build without head sha
@@ -79,4 +79,4 @@ jobs:
 
       - id: dump-github-context
         name: "👀 view github metadata"
-        run: echo ${{ toJson(github) }}
+        run: echo ${{ github }}
