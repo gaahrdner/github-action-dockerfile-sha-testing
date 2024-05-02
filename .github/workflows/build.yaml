@@ -39,7 +39,11 @@ jobs:
       
       - id: dump-docker-metadata
         name: "👀 view docker metadata"
-        run: echo ${{ steps.docker-metadata.outputs.json }}
+        run: echo ${{ toJson(steps.docker-metadata.outputs.json) }}
+
+      - id: dump-github-context
+        name: "👀 view github metadata"
+        run: echo ${{ toJson(github) }}
 
   build-without-head-sha:
     name: Build without head sha
@@ -69,4 +73,8 @@ jobs:
       
       - id: dump-docker-metadata
         name: "👀 view docker metadata"
-        run: echo ${{ steps.docker-metadata.outputs.json }}
+        run: echo ${{ toJson(steps.docker-metadata.outputs.json) }}
+
+      - id: dump-github-context
+        name: "👀 view github metadata"
+        run: echo ${{ toJson(github) }}
