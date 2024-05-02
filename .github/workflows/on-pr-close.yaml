@@ -1,0 +1,15 @@
+name: Test PR Merge 
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  push-merge-commit-tag:
+    name: Push merge commit tag
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+    - id: dump-pullrequest-context
+      name: Dump pull request context
+      run: echo "${{ github.event }}"
