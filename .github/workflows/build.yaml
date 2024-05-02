@@ -8,59 +8,65 @@ on:
 
 jobs:
   build-with-head-sha:
-  steps:
-    - id: checkout
-      name: "☁️ checkout code"
-      uses: actions/checkout@v4
-    
-    - id: setup-buildx
-      name: "🔧 setup docker buildx"
-      uses: docker/setup-buildx-action@v3
-    
-    - id: docker-metadata
-      name: "📝 generate docker metadata"
-      uses: docker/metadata-action@v5
-      env:
-        # don't use the temporary sha the PR is based on
-        # see: https://github.com/docker/metadata-action/issues/206
-        DOCKER_METADATA_PR_HEAD_SHA: "false"
-      with:
-        images: |
-          ${{ github.event.repository.name }}
-        # only set latest when the branch is the default branch
-        tags: |
-          type=raw,value=latest,enable={{is_default_branch}}
-          type=sha,prefix=,format=short
-          type=sha,prefix=,format=long
-          type=ref,enable=true,prefix=,suffix=,event=tag
-    
-    - id: dump-docker-metadata
-      name: "👀 view docker metadata"
-      run: echo ${{ steps.docker-metadata.outputs.json }}
+    name: Build with head sha
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        name: "☁️ checkout code"
+        uses: actions/checkout@v4
+      
+      - id: setup-buildx
+        name: "🔧 setup docker buildx"
+        uses: docker/setup-buildx-action@v3
+      
+      - id: docker-metadata
+        name: "📝 generate docker metadata"
+        uses: docker/metadata-action@v5
+        env:
+          # don't use the temporary sha the PR is based on
+          # see: https://github.com/docker/metadata-action/issues/206
+          DOCKER_METADATA_PR_HEAD_SHA: "true"
+        with:
+          images: |
+            ${{ github.event.repository.name }}
+          # only set latest when the branch is the default branch
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=${{github.event.pull_request.head.sha}}
+            type=sha,prefix=,format=short
+            type=sha,prefix=,format=long
+            type=ref,enable=true,prefix=,suffix=,event=tag
+      
+      - id: dump-docker-metadata
+        name: "👀 view docker metadata"
+        run: echo ${{ steps.docker-metadata.outputs.json }}
 
   build-without-head-sha:
-  steps:
-    - id: checkout
-      name: "☁️ checkout code"
-      uses: actions/checkout@v4
-    
-    - id: setup-buildx
-      name: "🔧 setup docker buildx"
-      uses: docker/setup-buildx-action@v3
-    
-    - id: docker-metadata
-      name: "📝 generate docker metadata"
-      uses: docker/metadata-action@v5
-      with:
-        images: |
-          ${{ github.event.repository.name }}
-        # only set latest when the branch is the default branch
-        tags: |
-          type=raw,value=latest,enable={{is_default_branch}}
-          type=sha,prefix=,format=short
-          type=sha,prefix=,format=long
-          type=ref,enable=true,prefix=,suffix=,event=tag
-    
-    - id: dump-docker-metadata
-      name: "👀 view docker metadata"
-      run: echo ${{ steps.docker-metadata.outputs.json }}
+    name: Build without head sha
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        name: "☁️ checkout code"
+        uses: actions/checkout@v4
+      
+      - id: setup-buildx
+        name: "🔧 setup docker buildx"
+        uses: docker/setup-buildx-action@v3
+      
+      - id: docker-metadata
+        name: "📝 generate docker metadata"
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ github.event.repository.name }}
+          # only set latest when the branch is the default branch
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=${{github.event.pull_request.head.sha}}
+            type=sha,prefix=,format=short
+            type=sha,prefix=,format=long
+            type=ref,enable=true,prefix=,suffix=,event=tag
+      
+      - id: dump-docker-metadata
+        name: "👀 view docker metadata"
+        run: echo ${{ steps.docker-metadata.outputs.json }}
