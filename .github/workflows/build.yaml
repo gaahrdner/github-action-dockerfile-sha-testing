@@ -25,7 +25,7 @@ jobs:
         env:
           # don't use the temporary sha the PR is based on
           # see: https://github.com/docker/metadata-action/issues/206
-          DOCKER_METADATA_PR_HEAD_SHA: "false"
+          DOCKER_METADATA_PR_HEAD_SHA: "true"
         with:
           images: |
             ${{ github.event.repository.name }}
