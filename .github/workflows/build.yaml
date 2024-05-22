@@ -32,8 +32,6 @@ jobs:
           # only set latest when the branch is the default branch
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
-            type=raw,value=${{github.event.pull_request.head.sha}}
-            type=raw,value=${{github.event.pull_request.base.sha}}
             type=sha,prefix=,format=short
             type=sha,prefix=,format=long
             type=ref,enable=true,prefix=,suffix=,event=tag
@@ -67,8 +65,6 @@ jobs:
           # only set latest when the branch is the default branch
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
-            type=raw,value=${{github.event.pull_request.head.sha}}
-            type=raw,value=${{github.event.pull_request.base.sha}}
             type=sha,prefix=,format=short
             type=sha,prefix=,format=long
             type=ref,enable=true,prefix=,suffix=,event=tag
